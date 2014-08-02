@@ -54,6 +54,12 @@
     <ClInclude Include="until.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="LogIn.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RegEditEx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PrincClient.cpp">
@@ -75,6 +81,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="until.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="RegEditEx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LogIn.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

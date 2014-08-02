@@ -1,4 +1,6 @@
+#include "stdafx.h"
 #include <windows.h>
+#include "RegEditEx.h"
 //去除字符串类型前面的空格
 char *DelSpace(char *szData)
 {
@@ -72,6 +74,8 @@ int  ReadRegEx(HKEY MainKey,LPCTSTR SubKey,LPCTSTR Vname,DWORD Type,char *szData
 	int    ValueDWORD,iResult=0;
 	char*  PointStr;  
 	char   KeyName[32],ValueSz[MAX_PATH],ValueTemp[MAX_PATH];	
+	//tring KeyName[32],ValueSz[MAX_PATH],ValueTemp[MAX_PATH];	
+	//tring ValueSz;
 	DWORD  szSize,KnSize,dwIndex=0;	 
 
 	memset(KeyName,0,sizeof(KeyName));
@@ -118,7 +122,7 @@ int  ReadRegEx(HKEY MainKey,LPCTSTR SubKey,LPCTSTR Vname,DWORD Type,char *szData
 				szSize = sizeof(DWORD);
 				if(RegQueryValueEx(hKey,Vname,NULL,&Type,(LPBYTE)&ValueDWORD,&szSize ) == ERROR_SUCCESS)						
 				{
-					wsprintf(szData,"%d",ValueDWORD);
+					wsprintfA(szData,"%d",ValueDWORD);
 					iResult =1;
 				}
 				break;
@@ -134,9 +138,9 @@ int  ReadRegEx(HKEY MainKey,LPCTSTR SubKey,LPCTSTR Vname,DWORD Type,char *szData
 			{				 
 				memset(ValueSz,0,sizeof(ValueSz));
 				szSize   = sizeof(ValueSz);
-                if(RegEnumKeyEx(hKey,dwIndex++,ValueSz,&szSize,NULL,NULL,NULL,NULL) != ERROR_SUCCESS)
+                if(RegEnumKeyExA(hKey,dwIndex++,ValueSz,&szSize,NULL,NULL,NULL,NULL) != ERROR_SUCCESS)
 					break;
-                wsprintf(ValueTemp,"[%s]\r\n",ValueSz);
+                wsprintfA(ValueTemp,"[%s]\r\n",ValueSz);
 				strcat(szData,ValueTemp);
 				iResult =1;
 			}			 
@@ -149,27 +153,27 @@ int  ReadRegEx(HKEY MainKey,LPCTSTR SubKey,LPCTSTR Vname,DWORD Type,char *szData
 				memset(ValueTemp,0,sizeof(ValueTemp));
 				KnSize = sizeof(KeyName);
                 szSize = sizeof(ValueSz);
-                if(RegEnumValue(hKey,dwIndex++,KeyName,&KnSize,NULL,&Type,(LPBYTE)ValueSz,&szSize) != ERROR_SUCCESS)
+                if(RegEnumValueA(hKey,dwIndex++,KeyName,&KnSize,NULL,&Type,(LPBYTE)ValueSz,&szSize) != ERROR_SUCCESS)
 					break;
 				switch(Type)				 				
 				{				     
 				case REG_SZ:					 						 
-					wsprintf(ValueTemp,"%-24s %-15s %s \r\n",KeyName,"REG_SZ",ValueSz);					     
+					wsprintfA(ValueTemp,"%-24s %-15s %s \r\n",KeyName,"REG_SZ",ValueSz);					     
 					break;
 				case REG_EXPAND_SZ:                   						 
-					wsprintf(ValueTemp,"%-24s %-15s %s \r\n",KeyName,"REG_EXPAND_SZ",ValueSz);
+					wsprintfA(ValueTemp,"%-24s %-15s %s \r\n",KeyName,"REG_EXPAND_SZ",ValueSz);
 					break;
 				case REG_DWORD:
-					wsprintf(ValueTemp,"%-24s %-15s 0x%x(%d) \r\n",KeyName,"REG_DWORD",ValueSz,int(ValueSz));
+					wsprintfA(ValueTemp,"%-24s %-15s 0x%x(%d) \r\n",KeyName,"REG_DWORD",ValueSz,int(ValueSz));
 					break;
 				case REG_MULTI_SZ:
-                    wsprintf(ValueTemp,"%-24s %-15s \r\n",KeyName,"REG_MULTI_SZ");
+                    wsprintfA(ValueTemp,"%-24s %-15s \r\n",KeyName,"REG_MULTI_SZ");
 					break;
 			    case REG_BINARY:
-					wsprintf(ValueTemp,"%-24s %-15s \r\n",KeyName,"REG_BINARY");
+					wsprintfA(ValueTemp,"%-24s %-15s \r\n",KeyName,"REG_BINARY");
 					break;
 				}
-				lstrcat(szData,ValueTemp);
+				lstrcatA(szData,ValueTemp);
 				iResult =1;
 			}
 			break;

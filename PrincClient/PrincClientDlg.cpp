@@ -64,6 +64,7 @@ BEGIN_MESSAGE_MAP(CPrincClientDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CPrincClientDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CPrincClientDlg::OnBnClickedButton2)
 END_MESSAGE_MAP()
 
 
@@ -159,4 +160,11 @@ void CPrincClientDlg::OnBnClickedButton1()
 	// TODO: 在此添加控件通知处理程序代码
 	m_clientSocket.Connect(_T("127.0.0.1"),9527);
 
+}
+
+
+void CPrincClientDlg::OnBnClickedButton2()
+{
+
+	// TODO: 在此添加控件通知处理程序代码
 }
