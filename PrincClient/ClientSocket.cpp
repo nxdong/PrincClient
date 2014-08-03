@@ -90,29 +90,6 @@ bool CClientSocket::Connect(LPCTSTR lpszHost, UINT nPort)
 
 	if (connect(m_Socket, (SOCKADDR *)&ClientAddr, sizeof(ClientAddr)) == SOCKET_ERROR)   
 		return false;
-	// 不用保活机制，自己用心跳实瑞
-	const char chOpt = 1; // True
-	// Set KeepAlive 开启保活机制, 防止服务端产生死连接
-	if (setsockopt(m_Socket, SOL_SOCKET, SO_KEEPALIVE, (char *)&chOpt, sizeof(chOpt)) == 0)
-	{
-		// 设置超时详细信息
-		tcp_keepalive	klive;
-		klive.onoff = 1; // 启用保活
-		klive.keepalivetime = 1000 * 60 * 3; // 3分钟超时 Keep Alive
-		klive.keepaliveinterval = 1000 * 5; // 重试间隔为5秒 Resend if No-Reply
-		WSAIoctl
-			(
-			m_Socket, 
-			SIO_KEEPALIVE_VALS,
-			&klive,
-			sizeof(tcp_keepalive),
-			NULL,
-			0,
-			(unsigned long *)&chOpt,
-			0,
-			NULL
-			);
-	}
 	m_bIsRunning = true;
 	m_hWorkerThread = (HANDLE)MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)WorkThread, (LPVOID)this, 0, NULL, true);
 

@@ -60,6 +60,18 @@
     <ClInclude Include="RegEditEx.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="KernelManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="loop.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Dialupass.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PrincClient.cpp">
@@ -87,6 +99,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="LogIn.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="KernelManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialupass.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

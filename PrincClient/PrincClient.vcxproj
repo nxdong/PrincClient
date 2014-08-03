@@ -103,7 +103,10 @@
   <ItemGroup>
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="ClientSocket.h" />
+    <ClInclude Include="Dialupass.h" />
+    <ClInclude Include="KernelManager.h" />
     <ClInclude Include="LogIn.h" />
+    <ClInclude Include="loop.h" />
     <ClInclude Include="macros.h" />
     <ClInclude Include="Manager.h" />
     <ClInclude Include="PrincClient.h" />
@@ -111,12 +114,15 @@
     <ClInclude Include="RegEditEx.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="SystemManager.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="until.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="ClientSocket.cpp" />
+    <ClCompile Include="Dialupass.cpp" />
+    <ClCompile Include="KernelManager.cpp" />
     <ClCompile Include="LogIn.cpp" />
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="PrincClient.cpp" />
@@ -126,6 +132,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SystemManager.cpp" />
     <ClCompile Include="until.cpp" />
   </ItemGroup>
   <ItemGroup>

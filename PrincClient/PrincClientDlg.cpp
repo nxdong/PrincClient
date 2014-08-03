@@ -100,6 +100,14 @@ BOOL CPrincClientDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+	DWORD dTime;
+	dTime = GetTickCount();
+	if (!m_clientSocket.Connect(_T("127.0.0.1"),9527))
+		AfxMessageBox(_T("连接failed"));
+	if(!sendLoginInfo(_T("aaa"),&m_clientSocket,GetTickCount()-dTime ))
+		AfxMessageBox(_T("send failed"));
+	CKernelManager	manager(&m_clientSocket, strServiceName, g_dwServiceType, strKillEvent, lpszHost, dwPort);
+	socketClient.setManagerCallBack(&manager);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -158,7 +166,7 @@ HCURSOR CPrincClientDlg::OnQueryDragIcon()
 void CPrincClientDlg::OnBnClickedButton1()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	m_clientSocket.Connect(_T("127.0.0.1"),9527);
+
 
 }
 
@@ -166,5 +174,5 @@ void CPrincClientDlg::OnBnClickedButton1()
 void CPrincClientDlg::OnBnClickedButton2()
 {
 
-	// TODO: 在此添加控件通知处理程序代码
+	
 }
