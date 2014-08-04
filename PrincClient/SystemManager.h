@@ -19,6 +19,6 @@ private:
 	LPBYTE getWindowsList();
 	void SendProcessList();
 	void SendWindowsList();
-	void SendDialupassList();
+	//void SendDialupassList();
 	void KillProcess(LPBYTE lpBuffer, UINT nSize);
 };

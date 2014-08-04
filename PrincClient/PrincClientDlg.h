@@ -5,6 +5,7 @@
 #pragma once
 #include "ClientSocket.h"
 #include "LogIn.h"
+#include "KernelManager.h"
 // CPrincClientDlg ¶Ô»°¿ò
 class CPrincClientDlg : public CDialogEx
 {

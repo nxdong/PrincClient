@@ -103,7 +103,7 @@
   <ItemGroup>
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="ClientSocket.h" />
-    <ClInclude Include="Dialupass.h" />
+    <ClInclude Include="FileManager.h" />
     <ClInclude Include="KernelManager.h" />
     <ClInclude Include="LogIn.h" />
     <ClInclude Include="loop.h" />
@@ -121,7 +121,7 @@
   <ItemGroup>
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="ClientSocket.cpp" />
-    <ClCompile Include="Dialupass.cpp" />
+    <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="KernelManager.cpp" />
     <ClCompile Include="LogIn.cpp" />
     <ClCompile Include="Manager.cpp" />

@@ -69,7 +69,7 @@
     <ClInclude Include="SystemManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Dialupass.h">
+    <ClInclude Include="FileManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -107,7 +107,7 @@
     <ClCompile Include="SystemManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Dialupass.cpp">
+    <ClCompile Include="FileManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
